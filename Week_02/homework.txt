@@ -1,0 +1,115 @@
+242. 有效的字母异位词
+//C语言
+bool isAnagram(char* s, char* t) {
+    int len_s = strlen(s), len_t = strlen(t);
+    if (len_s != len_t) {
+        return false;
+    }
+    int table[26];
+    memset(table, 0, sizeof(table));
+    for (int i = 0; i < len_s; ++i) {
+        table[s[i] - 'a']++;
+    }
+    for (int i = 0; i < len_t; ++i) {
+        table[t[i] - 'a']--;
+        if (table[t[i] - 'a'] < 0) {
+            return false;
+        }
+    }
+    return true;
+}
+
+1. 两数之和
+//Pathon3
+class Solution:
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+        hashtable = dict()
+        for i, num in enumerate(nums):
+            if target - num in hashtable:
+                return [hashtable[target - num], i]
+            hashtable[nums[i]] = i
+        return []
+
+144. 二叉树的前序遍历
+//C语言
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     struct TreeNode *left;
+ *     struct TreeNode *right;
+ * };
+ */
+void preorder(struct TreeNode* root, int* res, int* resSize) {
+    if (root == NULL) {
+        return;
+    }
+    res[(*resSize)++] = root->val;
+    preorder(root->left, res, resSize);
+    preorder(root->right, res, resSize);
+}
+
+int* preorderTraversal(struct TreeNode* root, int* returnSize) {
+    int* res = malloc(sizeof(int) * 2000);
+    *returnSize = 0;
+    preorder(root, res, returnSize);
+    return res;
+}
+
+94. 二叉树的中序遍历
+//C语言
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     struct TreeNode *left;
+ *     struct TreeNode *right;
+ * };
+ */
+
+/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+void inorder(struct TreeNode* root, int* res, int* resSize) {
+    if (!root) {
+        return;
+    }
+    inorder(root->left, res, resSize);
+    res[(*resSize)++] = root->val;
+    inorder(root->right, res, resSize);
+}
+
+int* inorderTraversal(struct TreeNode* root, int* returnSize) {
+    int* res = malloc(sizeof(int) * 501);
+    *returnSize = 0;
+    inorder(root, res, returnSize);
+    return res;
+}
+145. 二叉树的后序遍历
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     struct TreeNode *left;
+ *     struct TreeNode *right;
+ * };
+ */
+
+/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+void postorder(struct TreeNode *root, int *res, int *resSize) {
+    if (root == NULL) {
+        return;
+    }
+    postorder(root->left, res, resSize);
+    postorder(root->right, res, resSize);
+    res[(*resSize)++] = root->val;
+}
+
+int *postorderTraversal(struct TreeNode *root, int *returnSize) {
+    int *res = malloc(sizeof(int) * 2001);
+    *returnSize = 0;
+    postorder(root, res, returnSize);
+    return res;
+}
