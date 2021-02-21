@@ -1,0 +1,80 @@
+236. 二叉树的最近公共祖先
+//python3
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution:
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        if not root or root == p or root == q: return root
+        left = self.lowestCommonAncestor(root.left, p, q)
+        right = self.lowestCommonAncestor(root.right, p, q)
+        if not left: return right
+        if not right: return left
+        return root
+
+//C
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     struct TreeNode *left;
+ *     struct TreeNode *right;
+ * };
+ */
+struct TreeNode* lowestCommonAncestor(struct TreeNode* root, struct TreeNode* p, struct TreeNode* q) {
+    if (NULL == root || root == p || root == q)
+        return root;
+
+    struct TreeNode *left = lowestCommonAncestor(root->left, p, q);
+    struct TreeNode *right = lowestCommonAncestor(root->right, p, q);
+
+    if (NULL != left && NULL != right)
+        return root;
+
+    return NULL == left ? right : left;
+}
+
+105. 从前序与中序遍历序列构造二叉树
+//python3
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def buildTree(self, preorder: List[int], inorder: List[int]) -> TreeNode:
+        if not preorder or not inorder:  # 递归终止条件
+            return
+        root = TreeNode(preorder[0])  # 先序为“根左右”，所以根据preorder可以确定root
+        idx = inorder.index(preorder[0])  # 中序为“左根右”，根据root可以划分出左右子树
+        # 下面递归对root的左右子树求解即可
+        root.left = self.buildTree(preorder[1:1 + idx], inorder[:idx])
+        root.right = self.buildTree(preorder[1 + idx:], inorder[idx + 1:])
+        return root
+
+C
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     struct TreeNode *left;
+ *     struct TreeNode *right;
+ * };
+ */
+struct TreeNode* buildTree(int* preorder, int preorderSize, int* inorder, int inorderSize){
+    if (preorderSize <= 0) return NULL;
+    struct TreeNode *root = (struct TreeNode *)malloc(sizeof(struct TreeNode));
+    root->val = preorder[0];
+    int index = 0;
+    while (index < inorderSize && inorder[index] != preorder[0]) ++index;
+
+    root->left = buildTree(preorder + 1, index, inorder, index);
+    root->right = buildTree(preorder + 1 + index, preorderSize - (index + 1), inorder + index + 1, inorderSize - (index + 1));
+
+    return root;
+}
