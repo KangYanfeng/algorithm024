@@ -1,0 +1,72 @@
+191. 位1的个数
+// C
+int hammingWeight(uint32_t n) {
+    int ret = 0;
+    while (n) {
+        n &= n - 1;
+        ret++;
+    }
+    return ret;
+}
+231. 2的幂
+// C
+bool isPowerOfTwo(int n) {
+  if (n == 0) return false;
+  long x = n;
+  return (x & (x - 1)) == 0;
+}
+//python
+class Solution:
+    def isPowerOfTwo(self, n: int) -> bool:
+        return n > 0 and n & (n - 1) == 0
+
+190. 颠倒二进制位
+// C
+uint32_t reverseBits(uint32_t n) 
+{
+    uint32_t ans = 0;
+    for (int i = 0; i < 8 * sizeof(uint32_t); i++) {
+        ans = (ans << 1) | (n & 1);
+        n = n >> 1;
+    }
+    return ans;
+}
+// Python3
+class Solution:
+    def reverseBits(self, n: int) -> int:
+         return int(bin(n)[2::].zfill(32)[::-1], 2)
+
+547. 省份数量
+// C
+int Find(int* parent, int index) {
+    if (parent[index] != index) {
+        parent[index] = Find(parent, parent[index]);
+    }
+    return parent[index];
+}
+
+void Union(int* parent, int index1, int index2) {
+    parent[Find(parent, index1)] = Find(parent, index2);
+}
+
+int findCircleNum(int** isConnected, int isConnectedSize, int* isConnectedColSize) {
+    int provinces = isConnectedSize;
+    int parent[provinces];
+    for (int i = 0; i < provinces; i++) {
+        parent[i] = i;
+    }
+    for (int i = 0; i < provinces; i++) {
+        for (int j = i + 1; j < provinces; j++) {
+            if (isConnected[i][j] == 1) {
+                Union(parent, i, j);
+            }
+        }
+    }
+    int circles = 0;
+    for (int i = 0; i < provinces; i++) {
+        if (parent[i] == i) {
+            circles++;
+        }
+    }
+    return circles;
+}
