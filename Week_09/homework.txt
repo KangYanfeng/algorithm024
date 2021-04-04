@@ -1,0 +1,90 @@
+1122. 数组的相对排序
+int* relativeSortArray(int* arr1, int arr1Size, int* arr2, int arr2Size, int* returnSize) {
+    int upper = 0;
+    for (int i = 0; i < arr1Size; i++) {
+        upper = fmax(upper, arr1[i]);
+    }
+    int frequency[upper + 1];
+    memset(frequency, 0, sizeof(frequency));
+    for (int i = 0; i < arr1Size; i++) {
+        frequency[arr1[i]]++;
+    }
+    int* ans = malloc(sizeof(int) * arr1Size);
+    *returnSize = 0;
+    for (int i = 0; i < arr2Size; i++) {
+        int x = arr2[i];
+        for (int j = 0; j < frequency[x]; j++) {
+            ans[(*returnSize)++] = x;
+        }
+        frequency[x] = 0;
+    }
+    for (int x = 0; x <= upper; x++) {
+        for (int i = 0; i < frequency[x]; i++) {
+            ans[(*returnSize)++] = x;
+        }
+    }
+    return ans;
+}
+//C语言
+242. 有效的字母异位词
+bool isAnagram(char* s, char* t) {
+    int len_s = strlen(s), len_t = strlen(t);
+    if (len_s != len_t) {
+        return false;
+    }
+    int table[26];
+    memset(table, 0, sizeof(table));
+    for (int i = 0; i < len_s; ++i) {
+        table[s[i] - 'a']++;
+    }
+    for (int i = 0; i < len_t; ++i) {
+        table[t[i] - 'a']--;
+        if (table[t[i] - 'a'] < 0) {
+            return false;
+        }
+    }
+    return true;
+}
+//C语言
+205. 同构字符串
+bstruct HashTable {
+    char key;
+    char val;
+    UT_hash_handle hh;
+};
+
+bool isIsomorphic(char* s, char* t) {
+    struct HashTable* s2t = NULL;
+    struct HashTable* t2s = NULL;
+    int len = strlen(s);
+    for (int i = 0; i < len; ++i) {
+        char x = s[i], y = t[i];
+        struct HashTable *tmp1, *tmp2;
+        HASH_FIND(hh, s2t, &x, sizeof(char), tmp1);
+        HASH_FIND(hh, t2s, &y, sizeof(char), tmp2);
+        if (tmp1 != NULL) {
+            if (tmp1->val != y) {
+                return false;
+            }
+        } else {
+            tmp1 = malloc(sizeof(struct HashTable));
+            tmp1->key = x;
+            tmp1->val = y;
+            HASH_ADD(hh, s2t, key, sizeof(char), tmp1);
+        }
+        if (tmp2 != NULL) {
+            if (tmp2->val != x) {
+                return false;
+            }
+        } else {
+            tmp2 = malloc(sizeof(struct HashTable));
+            tmp2->key = y;
+            tmp2->val = x;
+            HASH_ADD(hh, t2s, key, sizeof(char), tmp2);
+        }
+    }
+    return true;
+}
+
+
+
